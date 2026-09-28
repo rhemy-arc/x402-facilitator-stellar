@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "feat/trust-proxy-ip-resolution",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "feat/trust-proxy-ip-resolution": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "feat/trust-proxy-ip-resolution",
+    "origin"
+  ]
+}

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node init && node index.js"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^16.2.0"

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node init && node index.js"
   },
   "dependencies": {
     "@x402/core": "^2.21.0",
