@@ -14,6 +14,7 @@ import { annotateSpan, withRequestSpan, tracedSchemeCall } from './tracing.js';
 import { createCorsHook, createPreflightHandler } from './cors.js';
 import { createAuthMiddleware } from './auth.js';
 import { handleRateLimit, rejectRateLimited } from './rate-limit-http.js';
+import { createTrustProxyHook } from './trust-proxy.js';
 import { applyDiscoveryCache } from './catalog/discovery-cache.js';
 import {
   BODY_LIMIT_BYTES,
@@ -181,19 +182,7 @@ export async function createApp(
     }
   });
 
-  if (typeof config.trustProxy === 'number') {
-    const hops = Math.max(0, Math.floor(config.trustProxy));
-    app.addHook('onRequest', async req => {
-      const raw = req.headers['x-forwarded-for'] ?? '';
-      const forwarded = String(raw)
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
-      const chain = [...forwarded, req.socket.remoteAddress];
-      const ip = chain[Math.max(0, chain.length - 1 - hops)] ?? req.socket.remoteAddress;
-      Object.defineProperty(req, 'ip', { value: ip, configurable: true });
-    });
-  }
+  app.addHook('onRequest', createTrustProxyHook(config.trustProxy));
 
   app.addHook('onRequest', async req => {
     const pseudonym = ipPseudonymizer(req.ip);
